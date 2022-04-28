@@ -2,3 +2,4 @@ matplotlib==3.5.1
 numpy==1.22.3
 opencv-python==4.5.5.64
 tensorflow==2.8.0
+paho-mqtt==1.6.1
