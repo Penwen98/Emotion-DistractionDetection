@@ -30,7 +30,7 @@ model.add(Flatten())
 model.add(Dense(1024, activation='relu'))
 model.add(Dropout(0.5))
 model.add(Dense(7, activation='softmax'))
-model.load_weights(sys.path[0] + '/model.h5')
+model.load_weights(sys.path[0] + '/emotion-weights.h5')
 
 def setup():
     global emotion_dict, cap
@@ -50,6 +50,7 @@ class NoFaceDetectedException(Exception):
 
 def getEmotions():
     # Find haar cascade to draw bounding box around face
+    global ret, frame
     ret, frame = cap.read()
     if not ret:
         return 0

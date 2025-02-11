@@ -1,5 +1,6 @@
 from mqtt_wrapper import MQTTWrapper
 import emotions
+import distractions
 import json
 import sys
 import time
@@ -8,9 +9,11 @@ def loadUserConfig():
     with open(sys.path[0] + "/userConfig.json") as json_file:
         return json.load(json_file)
 
-client = MQTTWrapper.fromJsonConfig(sys.path[0] + "/mqttConfig.json")
+emotions-client = MQTTWrapper.fromJsonConfig(sys.path[0] + "/emotionsMqttConfig.json")
+distractions-client = MQTTWrapper.fromJsonConfig(sys.path[0] + "/distractionsMqttConfig.json")
 user = loadUserConfig()
 emotions.setup()
+distractions.setup()
 
 while True:
     try:
@@ -26,8 +29,26 @@ while True:
                 "fear": emotionsMap["Fearful"]
             } 
         }
-        client.publish(json.dumps(dataToTransmit))
+        emotions-client.publish(json.dumps(dataToTransmit))
         print(dataToTransmit)
         time.sleep(1)
     except emotions.NoFaceDetectedException:
         print("No face found!")
+
+    try:
+        distractionMap = distractions.getDistraction()
+        dataToTransmit2 = { 
+            user["user"]: {
+                "drinking": distractionMap["Drinking"],
+                "brushing_hair": distractionMap["Brushing hair"],
+                "safe_driving": distractionMap["Safe driving"],
+                "talking_phone": distractionMap["Talking phone"],
+                "texting_phone": distractionMap["Texting phone"]
+            } 
+        }
+        distractions-client.publish(json.dumps(dataToTransmit2))
+        print(dataToTransmit2)
+        time.sleep(1)
+    except distractions.NoDriverDetectedException:
+        print("No driver found!")
+        
