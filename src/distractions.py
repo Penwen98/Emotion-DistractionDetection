@@ -45,17 +45,20 @@ def getDistraction():
     if not ret:
         return 0
     
-    facecasc = cv2.CascadeClassifier(sys.path[0] + '/haarcascade_upperbody.xml')
+    #facecasc = cv2.CascadeClassifier(sys.path[0] + '/haarcascade_upperbody.xml')
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    faces = facecasc.detectMultiScale(gray,scaleFactor=1.05, minNeighbors=5)
+    #faces = facecasc.detectMultiScale(gray,scaleFactor=1.05, minNeighbors=5)
+    resizedImg = np.expand_dims(np.expand_dims(cv2.resize(gray, (54, 128)), -1), 0)
     
     prediction = 0
-    for (x, y, w, h) in faces:
-        cv2.rectangle(frame, (x, y-50), (x+w, y+h+10), (255, 0, 0), 2)
-        #roi_gray = gray[y:y + h, x:x + w]
-        roi_gray = gray[y-40:y+h, x:x+w]
-        cropped_img = np.expand_dims(np.expand_dims(cv2.resize(roi_gray, (54, 128)), -1), 0)
-        prediction = model.predict(cropped_img)
+    #for (x, y, w, h) in faces:
+    #    cv2.rectangle(frame, (x, y-50), (x+w, y+h+10), (255, 0, 0), 2)
+    #    #roi_gray = gray[y:y + h, x:x + w]
+    #    roi_gray = gray[y-40:y+h, x:x+w]
+    #    cropped_img = np.expand_dims(np.expand_dims(cv2.resize(roi_gray, (54, 128)), -1), 0)
+    #    prediction = model.predict(cropped_img)
+    
+    prediction = model.predict(resizedImg)
     
     data = {}
     if type(prediction) is np.ndarray:
