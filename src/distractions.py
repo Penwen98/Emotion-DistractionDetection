@@ -23,16 +23,16 @@ model.add(Dropout(0.25))
 model.add(Flatten())
 model.add(Dense(1024, activation='relu'))
 model.add(Dropout(0.5))
-model.add(Dense(5, activation='softmax'))
+model.add(Dense(4, activation='softmax'))
 
-model.load_weights(sys.path[0] + '/distraction-weights.h5')
+model.load_weights(sys.path[0] + '/distraction-weights2.h5')
 
 
 def setup():
     global distr_dict
 
     # dictionary which assigns each label a state
-    distr_dict = {0: "Drinking", 1: "Brushing hair", 2: "Safe driving", 3: "Talking phone", 4: "Texting phone"}
+    distr_dict = {0: "Drinking", 1: "Safe driving", 2: "Talking phone", 3: "Texting phone"}
 
 class NoDriverDetectedException(Exception):
     def msg():
@@ -63,7 +63,7 @@ def getDistraction():
     data = {}
     if type(prediction) is np.ndarray:
         for distraction in distr_dict:
-            data[distr_dict[distraction]] = round(prediction[0][distraction].item(), 6)
+            data[distr_dict[distraction]] = round(prediction[0][distraction].item(), 5)
     else:
         raise NoDriverDetectedException
     
