@@ -55,6 +55,7 @@ def getEmotions():
     if not ret:
         return 0
     
+    
     facecasc = cv2.CascadeClassifier(sys.path[0] + '/haarcascade_frontalface_default.xml')
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     faces = facecasc.detectMultiScale(gray,scaleFactor=1.3, minNeighbors=5)
@@ -65,6 +66,7 @@ def getEmotions():
         roi_gray = gray[y:y + h, x:x + w]
         cropped_img = np.expand_dims(np.expand_dims(cv2.resize(roi_gray, (48, 48)), -1), 0)
         prediction = model.predict(cropped_img)
+    
 
     data = {}
     if type(prediction) is np.ndarray:

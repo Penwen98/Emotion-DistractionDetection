@@ -4,6 +4,7 @@ import cv2
 import sys
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Conv2D, MaxPooling2D, Flatten, Dropout
+import emotions
 
 
 model = Sequential()
@@ -27,17 +28,11 @@ model.add(Dense(5, activation='softmax'))
 model.load_weights(sys.path[0] + '/distraction-weights.h5')
 
 
-def webcamSetup():
-    global distr_dict, cap
-
-    # prevents openCL usage and unnecessary logging messages
-    cv2.ocl.setUseOpenCL(False)
+def setup():
+    global distr_dict
 
     # dictionary which assigns each label a state
     distr_dict = {0: "Drinking", 1: "Brushing hair", 2: "Safe driving", 3: "Talking phone", 4: "Texting phone"}
-    
-    # start the webcam feed
-    cap = cv2.VideoCapture(0)
 
 class NoDriverDetectedException(Exception):
     def msg():
@@ -45,7 +40,8 @@ class NoDriverDetectedException(Exception):
 
 def getDistraction():
     # Find haar cascade to draw bounding box around person (upper body)
-    ret, frame = cap.read()
+    ret = emotions.ret
+    frame = emotions.frame
     if not ret:
         return 0
     
@@ -56,7 +52,8 @@ def getDistraction():
     prediction = 0
     for (x, y, w, h) in faces:
         cv2.rectangle(frame, (x, y-50), (x+w, y+h+10), (255, 0, 0), 2)
-        roi_gray = gray[y:y + h, x:x + w]
+        #roi_gray = gray[y:y + h, x:x + w]
+        roi_gray = gray[y-40:y+h, x:x+w]
         cropped_img = np.expand_dims(np.expand_dims(cv2.resize(roi_gray, (54, 128)), -1), 0)
         prediction = model.predict(cropped_img)
     
