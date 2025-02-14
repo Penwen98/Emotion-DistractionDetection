@@ -1,4 +1,4 @@
-from mqtt_wrapper import MQTTWrapper
+import paho.mqtt.client as mqtt
 import emotions
 import distractions
 import json
@@ -9,8 +9,10 @@ def loadUserConfig():
     with open(sys.path[0] + "/userConfig.json") as json_file:
         return json.load(json_file)
 
-emotions_client = MQTTWrapper.fromJsonConfig(sys.path[0] + "/emotionsMqttConfig.json")
-distractions_client = MQTTWrapper.fromJsonConfig(sys.path[0] + "/distractionsMqttConfig.json")
+#emotions_client = MQTTWrapper.fromJsonConfig(sys.path[0] + "/emotionsMqttConfig.json")
+#distractions_client = MQTTWrapper.fromJsonConfig(sys.path[0] + "/distractionsMqttConfig.json")
+client = mqtt.Client()
+client.connect("192.168.1.105", 1883)
 user = loadUserConfig()
 emotions.setup()
 distractions.setup()
@@ -29,7 +31,7 @@ while True:
                 "fear": emotionsMap["Fearful"]
             } 
         }
-        emotions_client.publish(json.dumps(dataToTransmit))
+        client.publish("Emotions", json.dumps(dataToTransmit))
         print(dataToTransmit)
         time.sleep(1)
     except emotions.NoFaceDetectedException:
@@ -46,9 +48,8 @@ while True:
                 "texting_phone": distractionMap["Texting phone"]
             } 
         }
-        distractions_client.publish(json.dumps(dataToTransmit2))
+        client.publish("Distractions", json.dumps(dataToTransmit2))
         print(dataToTransmit2)
         time.sleep(1)
     except distractions.NoDriverDetectedException:
         print("No driver found!")
-        
