@@ -40,7 +40,7 @@ while True:
         dataToTransmit2 = { 
             user["user"]: {
                 "drinking": distractionMap["Drinking"],
-                #"brushing_hair": distractionMap["Brushing hair"],
+                "brushing_hair": distractionMap["Brushing hair"],
                 "safe_driving": distractionMap["Safe driving"],
                 "talking_phone": distractionMap["Talking phone"],
                 "texting_phone": distractionMap["Texting phone"]
