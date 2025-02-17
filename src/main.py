@@ -16,6 +16,7 @@ client.connect("192.168.1.105", 1883)
 user = loadUserConfig()
 emotions.setup()
 distractions.setup()
+distractions.updateTime()
 
 while True:
     try:

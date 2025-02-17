@@ -5,6 +5,7 @@ import sys
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Conv2D, MaxPooling2D, Flatten, Dropout
 import emotions
+import datetime
 
 
 model = Sequential()
@@ -34,6 +35,9 @@ def setup():
     # dictionary which assigns each label a state
     distr_dict = {0: "Drinking", 1: "Brushing hair", 2: "Safe driving", 3: "Talking phone", 4: "Texting phone"}
 
+def updateTime():
+    end_time = datetime.datetime.now() + datetime.timedelta(seconds=2)
+    
 class NoDriverDetectedException(Exception):
     def msg():
         return "No driver detected on the screen"
@@ -57,7 +61,6 @@ def getDistraction():
     #    roi_gray = gray[y-40:y+h, x:x+w]
     #    cropped_img = np.expand_dims(np.expand_dims(cv2.resize(roi_gray, (54, 128)), -1), 0)
     #    prediction = model.predict(cropped_img)
-    
     prediction = model.predict(resizedImg)
     
     data = {}
