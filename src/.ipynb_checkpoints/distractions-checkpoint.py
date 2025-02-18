@@ -35,8 +35,10 @@ def setup():
     # dictionary which assigns each label a state
     distr_dict = {0: "Drinking", 1: "Brushing hair", 2: "Safe driving", 3: "Talking phone", 4: "Texting phone"}
 
-def updateTime():
+def predictionSetup(image):
+    global end_time, saved_prediction
     end_time = datetime.datetime.now() + datetime.timedelta(seconds=2)
+    saved_prediction = model.predict(image)
     
 class NoDriverDetectedException(Exception):
     def msg():
@@ -55,6 +57,15 @@ def getDistraction():
     resizedImg = np.expand_dims(np.expand_dims(cv2.resize(gray, (54, 128)), -1), 0)
     
     prediction = 0
+    predictionSetup(resizedImg)
+    while datetime.datetime.now() < end_time:
+        if model.predict(resizedImg).all != saved_prediction.all:
+            predictionSetup(resizedImg)
+            break
+        else:
+            frame = emotions.frame
+            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            resizedImg = np.expand_dims(np.expand_dims(cv2.resize(gray, (54, 128)), -1), 0)
     #for (x, y, w, h) in faces:
     #    cv2.rectangle(frame, (x, y-50), (x+w, y+h+10), (255, 0, 0), 2)
     #    #roi_gray = gray[y:y + h, x:x + w]

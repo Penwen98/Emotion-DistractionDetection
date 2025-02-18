@@ -12,11 +12,11 @@ def loadUserConfig():
 #emotions_client = MQTTWrapper.fromJsonConfig(sys.path[0] + "/emotionsMqttConfig.json")
 #distractions_client = MQTTWrapper.fromJsonConfig(sys.path[0] + "/distractionsMqttConfig.json")
 client = mqtt.Client()
+#client.connect("localhost", 1883)
 client.connect("192.168.1.105", 1883)
 user = loadUserConfig()
 emotions.setup()
 distractions.setup()
-distractions.updateTime()
 
 while True:
     try:
