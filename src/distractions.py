@@ -34,6 +34,7 @@ def setup():
 
     # dictionary which assigns each label a state
     distr_dict = {0: "Drinking", 1: "Brushing hair", 2: "Safe driving", 3: "Talking phone", 4: "Texting phone"}
+    #distr_dict = {0: "Drinking", 1: "Safe driving", 2: "Talking phone", 3: "Texting phone"}
 
 def predictionSetup(image):
     global end_time, saved_prediction
