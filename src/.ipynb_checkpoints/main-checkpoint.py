@@ -9,10 +9,7 @@ def loadUserConfig():
     with open(sys.path[0] + "/userConfig.json") as json_file:
         return json.load(json_file)
 
-#emotions_client = MQTTWrapper.fromJsonConfig(sys.path[0] + "/emotionsMqttConfig.json")
-#distractions_client = MQTTWrapper.fromJsonConfig(sys.path[0] + "/distractionsMqttConfig.json")
 client = mqtt.Client()
-#client.connect("localhost", 1883)
 client.connect("192.168.1.105", 1883)
 user = loadUserConfig()
 emotions.setup()

@@ -34,7 +34,6 @@ def setup():
 
     # dictionary which assigns each label a state
     distr_dict = {0: "Drinking", 1: "Brushing hair", 2: "Safe driving", 3: "Talking phone", 4: "Texting phone"}
-    #distr_dict = {0: "Drinking", 1: "Safe driving", 2: "Talking phone", 3: "Texting phone"}
 
 def predictionSetup(image):
     global end_time, saved_prediction
@@ -46,19 +45,17 @@ class NoDriverDetectedException(Exception):
         return "No driver detected on the screen"
 
 def getDistraction():
-    # Find haar cascade to draw bounding box around person (upper body)
     ret = emotions.ret
     frame = emotions.frame
     if not ret:
         return 0
     
-    #facecasc = cv2.CascadeClassifier(sys.path[0] + '/haarcascade_upperbody.xml')
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    #faces = facecasc.detectMultiScale(gray,scaleFactor=1.05, minNeighbors=5)
     resizedImg = np.expand_dims(np.expand_dims(cv2.resize(gray, (54, 128)), -1), 0)
     
     prediction = 0
     predictionSetup(resizedImg)
+    
     while datetime.datetime.now() < end_time:
         if model.predict(resizedImg).all != saved_prediction.all:
             predictionSetup(resizedImg)
